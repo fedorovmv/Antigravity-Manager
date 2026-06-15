@@ -435,6 +435,27 @@ impl ProxyPoolManager {
             .collect()
     }
 
+    /// [HOT-RELOAD] Re-sync the in-memory DashMap from `config.account_bindings`.
+    /// Called after `update_proxy_pool` so that a wholesale ProxyPoolConfig
+    /// replacement (e.g. via `save_config`) does not leave the in-memory
+    /// bindings stale or empty.
+    pub async fn sync_bindings_from_config(&self) {
+        let config = self.config.read().await;
+        let snapshot = config.account_bindings.clone();
+        drop(config);
+
+        // Reset the DashMap: clear old entries, then insert fresh ones.
+        self.account_bindings.clear();
+        for (account_id, proxy_id) in &snapshot {
+            self.account_bindings
+                .insert(account_id.clone(), proxy_id.clone());
+        }
+        tracing::info!(
+            "[ProxyPool] Re-synced {} account bindings from config (hot-reload)",
+            snapshot.len()
+        );
+    }
+
     /// 持久化绑定关系到配置文件
     async fn persist_bindings(&self) {
         // 获取当前绑定快照

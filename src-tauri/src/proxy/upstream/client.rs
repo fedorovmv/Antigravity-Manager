@@ -75,7 +75,7 @@ const V1_INTERNAL_BASE_URL_FALLBACKS: [&str; 3] = [
 ];
 
 pub struct UpstreamClient {
-    default_client: Client,
+    default_client: RwLock<Client>,
     proxy_pool: Option<Arc<crate::proxy::proxy_pool::ProxyPoolManager>>,
     client_cache: DashMap<String, Client>, // proxy_id -> Client
     user_agent_override: RwLock<Option<String>>,
@@ -107,10 +107,52 @@ impl UpstreamClient {
         };
 
         Self {
-            default_client,
+            default_client: RwLock::new(default_client),
             proxy_pool,
             client_cache: DashMap::new(),
             user_agent_override: RwLock::new(None),
+        }
+    }
+
+    /// [HOT-RELOAD] Rebuild the default HTTP client using the supplied upstream
+    /// proxy config. Called from `update_proxy` so changes to the upstream proxy
+    /// take effect without restarting the app.
+    pub async fn rebuild_default_client(
+        &self,
+        proxy_config: Option<crate::proxy::config::UpstreamProxyConfig>,
+    ) {
+        let new_client = match Self::build_client_internal(proxy_config.clone()) {
+            Ok(c) => c,
+            Err(err_with_proxy) => {
+                tracing::error!(
+                    error = %err_with_proxy,
+                    "Hot-reload: failed to rebuild default HTTP client with configured upstream proxy; retrying without proxy"
+                );
+                match Self::build_client_internal(None) {
+                    Ok(c) => c,
+                    Err(err_without_proxy) => {
+                        tracing::error!(
+                            error = %err_without_proxy,
+                            "Hot-reload: failed to rebuild default HTTP client without proxy; keeping previous client"
+                        );
+                        return;
+                    }
+                }
+            }
+        };
+        let mut guard = self.default_client.write().await;
+        *guard = new_client;
+        tracing::info!("UpstreamClient default_client rebuilt (upstream proxy hot-reloaded)");
+    }
+
+    /// [HOT-RELOAD] Drop all per-proxy cached clients. Call after the pool
+    /// configuration changes (proxy URL/credentials edited, proxy removed,
+    /// bindings changed) so the next request rebuilds with fresh settings.
+    pub fn clear_client_cache(&self) {
+        let size = self.client_cache.len();
+        self.client_cache.clear();
+        if size > 0 {
+            tracing::info!("UpstreamClient cleared {} cached per-proxy clients", size);
         }
     }
 
@@ -232,7 +274,7 @@ impl UpstreamClient {
             }
         }
         // Fallback to default client
-        self.default_client.clone()
+        self.default_client.read().await.clone()
     }
 
     /// Build v1internal URL
