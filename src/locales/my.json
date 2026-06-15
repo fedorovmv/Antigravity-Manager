@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "loading": "Memuatkan...",
         "load_more": "Muat Lagi",
@@ -303,7 +303,8 @@
             "warmup_all_msg": "Adakah anda pasti mahu mencetuskan tugas pemanasan untuk semua akaun yang layak dengan segera? Ini akan menghantar trafik minimum ke perkhidmatan Google untuk menetapkan semula kitaran kuota.",
             "batch_warmup_title": "Pemanasan Manual Kelompok",
             "batch_warmup_msg": "Adakah anda pasti mahu mencetuskan pemanasan untuk {{count}} akaun yang dipilih dengan segera?"
-        }
+        },
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "Simpan Tetapan",

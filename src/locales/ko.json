@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "loading": "로딩 중...",
         "load_more": "더 보기",
@@ -306,7 +306,8 @@
             "warmup_all_msg": "모든 대상 계정에 대해 즉시 웜업 작업을 트리거하시겠습니까? 할당량 주기를 재설정하기 위해 Google 서비스에 최소한의 트래픽을 보냅니다.",
             "batch_warmup_title": "일괄 수동 웜업",
             "batch_warmup_msg": "선택한 {{count}}개 계정에 대해 즉시 웜업을 트리거하시겠습니까?"
-        }
+        },
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "설정 저장",

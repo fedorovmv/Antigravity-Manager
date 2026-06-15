@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "loading": "Cargando...",
         "load_more": "Cargar más",
@@ -303,7 +303,8 @@
             "warmup_all_msg": "¿Está seguro de que desea activar tareas de calentamiento para todas las cuentas elegibles inmediatamente? Esto enviará tráfico mínimo a los servicios de Google para reiniciar los ciclos de cuota.",
             "batch_warmup_title": "Calentamiento Manual en Lote",
             "batch_warmup_msg": "¿Está seguro de que desea activar el calentamiento para las {{count}} cuentas seleccionadas inmediatamente?"
-        }
+        },
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "Guardar Configuración",

@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "empty": "空",
         "loading": "載入中...",
@@ -303,7 +303,8 @@
             "warmup_all_msg": "確定要立即為所有符合條件的帳號觸發預熱任務嗎？這將向 Google 服務傳送極小流量以重置配額配額週期。",
             "batch_warmup_title": "批次手動預熱",
             "batch_warmup_msg": "確定要為選中的 {{count}} 個帳號立即觸發預熱嗎？"
-        }
+        },
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "儲存設定",

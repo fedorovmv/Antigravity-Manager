@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "empty": "Trống",
         "loading": "Đang tải...",
@@ -302,7 +302,8 @@
             "warmup_all_msg": "Bạn có chắc muốn chạy tác vụ làm nóng cho tất cả tài khoản đủ điều kiện ngay bây giờ? Việc này sẽ gửi một lượng traffic nhỏ đến Google để reset chu kỳ hạn mức.",
             "batch_warmup_title": "Làm nóng Thủ công Hàng loạt",
             "batch_warmup_msg": "Bạn có chắc muốn chạy tác vụ làm nóng cho {{count}} tài khoản đã chọn ngay bây giờ?"
-        }
+        },
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "Lưu Cài đặt",

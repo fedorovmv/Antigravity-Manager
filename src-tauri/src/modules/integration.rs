@@ -34,6 +34,27 @@ impl SystemIntegration for DesktopIntegration {
             account.email, target_ide
         ));
 
+        if target_ide == Some("agy") {
+            write_to_system_keyring(account)?;
+
+            if let Ok(storage_path) = device::get_storage_path(target_ide) {
+                if let Some(ref profile) = account.device_profile {
+                    let _ = device::write_profile(&storage_path, profile);
+                }
+            }
+
+            let is_running = process::is_process_running_by_name("agy");
+            let msg = if is_running {
+                format!("Account {} activated. Agy is running, token will be picked up automatically.", account.email)
+            } else {
+                format!("Account {} activated. Token is ready for your next CLI command.", account.email)
+            };
+            self.show_notification("Antigravity CLI", &msg);
+            self.update_tray();
+
+            return Ok(());
+        }
+
         // 1. 先关闭外部正在运行的进程（无论是原生还是IDE，先安全关闭，避免文件或凭据冲突）
         if process::is_antigravity_running(target_ide) {
             process::close_antigravity(20, target_ide)?;
@@ -345,6 +366,13 @@ impl SystemIntegration for HeadlessIntegration {
         account: &crate::models::Account,
         _target_ide: Option<&str>,
     ) -> Result<(), String> {
+        if _target_ide == Some("agy") {
+            return Err(
+                "Switching to the agy CLI is not supported in headless mode (no host keyring access)."
+                    .to_string(),
+            );
+        }
+
         crate::modules::logger::log_info(&format!(
             "[Headless] Account switched in memory: {}",
             account.email

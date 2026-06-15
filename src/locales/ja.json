@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "empty": "空",
         "loading": "読み込み中...",
@@ -315,7 +315,8 @@
         "warmup_batch_triggered": "{{count}}個のアカウントのウォームアップタスクを開始しました",
         "warmup_now": "今すぐウォームアップ",
         "warmup_selected": "ウォームアップ ({{count}})",
-        "warmup_this": "このアカウントをウォームアップ"
+        "warmup_this": "このアカウントをウォームアップ",
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "設定を保存",

@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "loading": "Carregando...",
         "load_more": "Carregar mais",
@@ -299,7 +299,8 @@
             "warmup_all_msg": "Tem certeza de que deseja acionar tarefas de aquecimento para todas as contas elegíveis imediatamente? Isso enviará tráfego mínimo para os serviços do Google para redefinir ciclos de cota.",
             "batch_warmup_title": "Aquecimento Manual em Lote",
             "batch_warmup_msg": "Tem certeza de que deseja acionar o aquecimento para as {{count}} contas selecionadas imediatamente?"
-        }
+        },
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "Salvar Configurações",

@@ -1,4 +1,4 @@
-﻿{
+{
     "common": {
         "empty": "Boş",
         "loading": "Yükleniyor...",
@@ -291,7 +291,8 @@
             "disable_proxy_msg": "Bu hesap için proxy'yi devre dışı bırakmak istediğinizden emin misiniz? Hesap uygulamada kullanılabilir durumda kalacaktır.",
             "enable_proxy_title": "Proxy'yi Etkinleştir",
             "enable_proxy_msg": "Bu hesap için proxy'yi yeniden etkinleştirmek istediğinizden emin misiniz?"
-        }
+        },
+        "switch_to_agy": "Switch to Antigravity CLI (agy)"
     },
     "settings": {
         "save": "Ayarları Kaydet",
