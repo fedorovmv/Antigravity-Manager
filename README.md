@@ -1,5 +1,5 @@
 # Antigravity Tools 🚀
-> 专业级 AI 账号管理与协议代理系统 (v4.2.2)
+> 专业级 AI 账号管理与协议代理系统 (v4.2.3)
 <div align="center">
   <img src="public/icon.png" alt="Antigravity Logo" width="120" height="120" style="border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
 
@@ -8,7 +8,7 @@
   
   <p>
     <a href="https://github.com/lbjlaq/Antigravity-Manager">
-      <img src="https://img.shields.io/badge/Version-4.2.2-blue?style=flat-square" alt="Version">
+      <img src="https://img.shields.io/badge/Version-4.2.3-blue?style=flat-square" alt="Version">
     </a>
     <img src="https://img.shields.io/badge/Tauri-v2-orange?style=flat-square" alt="Tauri">
     <img src="https://img.shields.io/badge/Backend-Rust-red?style=flat-square" alt="Rust">
@@ -43,7 +43,7 @@
 | <img src="docs/images/packycode_logo.png" width="200" alt="PackyCode Logo"> | 感谢 **PackyCode** 对本项目的赞助！PackyCode 是一家可靠高效的 API 中转服务商，提供 Claude Code、Codex、Gemini 等多种服务的中转。PackyCode 为本项目的用户提供了特别优惠：使用[此链接](https://www.packyapi.com/register?aff=Ctrler)注册，并在充值时输入 **“Ctrler”** 优惠码即可享受 **九折优惠**。 |
 | <img src="docs/images/claudeapilogo.png" width="200" alt="Claude API Logo"> | 感谢 **Claude API** 对本项目的支持！claudeapi.com 是一家走**官方与 AWS 渠道**接入的 **Claude API** 中转站，专注 Claude，主打高稳定、低延迟，完整支持 Claude Code。为本项目用户提供专属福利：通过[专属链接](https://console.claudeapi.com/register?source=antigravity)注册即送**免费测试额度，零门槛跑通**；充值再享 **95 折**专属优惠(联系客服）。 |
 | <img src="docs/images/AICodeMirror.jpg" width="200" alt="AICodeMirror Logo"> | 感谢 AICodeMirror 赞助了本项目！AICodeMirror 提供 Claude Code / Codex / Gemini CLI 官方高稳定中转服务，支持企业级高并发、极速开票、7×24 专属技术支持。 Claude Code / Codex / Gemini 官方渠道低至 3.8 / 0.2 / 0.9 折，充值更有折上折！AICodeMirror 为 Antigravity-Manager 的用户提供了特别福利，通过[此链接](https://www.aicodemirror.com/register?invitecode=MV5XUM)注册的用户，可享受首充8折，企业客户最高可享 7.5 折！ |
-| <img src="https://coder.visioncoder.cn/logo.png" width="200" alt="VisionCoder Logo"> | 感谢 **VisionCoder** 对本项目的支持。[VisionCoder 开发平台](https://coder.visioncoder.cn) 是一个可靠高效性 API 中继服务提供商，提供 Claude Code、Codex、Gemini 等主流 AI 模型，帮助开发者和团队更轻松地集成 AI 功能，提升工作效率。**VisionCoder** 为本站用户提供了专属福利：通过[此链接](https://coder.visioncoder.cn)注册并购买 [Token Plan](https://coder.visioncoder.cn) 限时活动，可享受“**买 1 个月赠 1 个月**”优惠。 |
+| <img src="https://coder.visioncoder.cn/logo.png" width="200" alt="VisionCoder Logo"> | 感谢 **VisionCoder** 对本项目的支持。[VisionCoder 开发平台](https://coder.visioncoder.cn) 是一个可靠高效的 API 中继服务提供商，提供 Claude Code、Codex、Gemini 等主流 AI 模型，帮助开发者和团队更轻松地集成 AI 功能，提升工作效率。此外，**VisionCoder** 还提供 **Claude Max 200** 与 **GPT Pro 200** **高级成品号**的独家售卖渠道，助力体验全网顶配 AI 的算力与体验。 |
 | <img src="docs/images/APIKEYFUN.png" width="200" alt="APIKEYFUN Logo"> | 感谢 APIKEY.FUN 赞助本项目！APIKEY.FUN 是一家专业的企业级 AI 中转站，致力于为企业和个人开发者提供稳定、高效、低成本的 AI 模型 API 接入服务。平台支持 Claude、OpenAI、Gemini 等主流热门模型，价格低至官方原价的 7%。通过本项目[专属链接](https://apikey.fun/register?aff=Ctrler)注册，还可享受最高 **充值永久 95 折** 专属优惠。 |
 
 
@@ -132,7 +132,7 @@ graph TD
 
 **Linux / macOS:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/lbjlaq/Antigravity-Manager/v4.2.2/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lbjlaq/Antigravity-Manager/v4.2.3/install.sh | bash
 ```
 
 **Windows (PowerShell):**
@@ -142,7 +142,7 @@ irm https://raw.githubusercontent.com/lbjlaq/Antigravity-Manager/main/install.ps
 
 > **支持的格式**: Linux (`.deb` / `.rpm` / `.AppImage`) | macOS (`.dmg`) | Windows (NSIS `.exe`)
 >
-> **高级用法**: 安装指定版本 `curl -fsSL ... | bash -s -- --version 4.2.2`，预览模式 `curl -fsSL ... | bash -s -- --dry-run`
+> **高级用法**: 安装指定版本 `curl -fsSL ... | bash -s -- --version 4.2.3`，预览模式 `curl -fsSL ... | bash -s -- --dry-run`
 
 #### macOS - Homebrew
 如果您已安装 [Homebrew](https://brew.sh/)，也可以通过以下命令安装：
@@ -154,7 +154,6 @@ brew tap lbjlaq/antigravity-manager https://github.com/lbjlaq/Antigravity-Manage
 # 2. 安装应用
 brew install --cask antigravity-tools
 ```
-> **提示**: 如果遇到权限问题，建议添加 `--no-quarantine` 参数。
 
 #### Arch Linux
 您可以选择通过一键安装脚本或 Homebrew 进行安装：
@@ -244,11 +243,8 @@ Copyright © 2024-2026 [lbjlaq](https://github.com/lbjlaq)
     ```bash
     sudo xattr -rd com.apple.quarantine "/Applications/Antigravity Tools.app"
     ```
-2.  **Homebrew 安装技巧**:
-    如果您使用 brew 安装，可以添加 `--no-quarantine` 参数来规避此问题：
-    ```bash
-    brew install --cask --no-quarantine antigravity-tools
-    ```
+2.  **Homebrew 安装优势**:
+    现在通过 Homebrew (`brew install --cask antigravity-tools`) 安装时，系统会在安装末尾自动执行清理属性的操作，**真正实现开箱即用**。
 
 ## 🔌 快速接入示例
 
@@ -442,6 +438,24 @@ response = client.chat.completions.create(
 ## 📝 开发者与社区
 
 *   **版本演进 (Changelog)**:
+    *   **v4.2.3 (2026-06-16)**:
+        -   **[体验优化] 优化 Homebrew 安装体验，彻底免除“应用已损坏”弹窗 (Brew Cask Quarantine Auto-Clear)**:
+            -   **问题修复**: 为 macOS 的 Homebrew Cask 安装添加了自动清理 `com.apple.quarantine` 属性的脚本，彻底解决了由于系统安全机制导致初次打开应用时弹出“应用已损坏”拦截的问题 ([PR #3180](https://github.com/lbjlaq/Antigravity-Manager/pull/3180))。
+            -   **体验优化**: Homebrew 用户现在可以真正实现无缝的“开箱即用”体验，无需再手动执行去除隔离属性的终端命令。
+        -   **[核心修复] 支持 HTTP 代理池配置热更新 (Proxy Pool Hot Reload)**:
+            -   **问题修复**: 修复了在应用内修改 HTTP 代理池配置（如代理 URLs、端口绑定、认证凭证等）或上游代理设置后，无法在运行时实时生效、必须重启应用的问题 ([PR #3183](https://github.com/lbjlaq/Antigravity-Manager/pull/3183))。
+            -   **体验优化**: 现在保存代理配置时，系统会立即在后台重新应用并加载最新的代理池状态，无需手动重启。
+        -   **[核心功能] 新增 Antigravity CLI (agy) 账号无缝切换 (CLI Account Switcher)**:
+            -   **一键同步**: 在账号管理界面中新增了针对 Antigravity 命令行工具 (`agy`) 的专属切换支持 ([PR #3184](https://github.com/lbjlaq/Antigravity-Manager/pull/3184))。
+            -   **凭证注入**: 当点击切换时，目标账号的 OAuth 凭证会自动写入系统的凭据管理器 (Keyring) 和设备配置文件中，使得 `agy` 命令行工具无需二次认证即可立即使用最新账号。
+        -   **[核心修复] 移除冗余版本检测逻辑，优化 IDE 账号切换 (IDE Login Optimization)**:
+            -   **问题修复**: 移除了在 IDE 环境下切换账号时多余的版本号检测步骤，解决了因 Windows 环境下执行 PowerShell 解析版本出错导致注入失败、无法登录的问题。
+            -   **效率提升**: 直接强制采用最新的统一格式 (`antigravityUnifiedStateSync.oauthToken`) 注入到 SQLite 数据库，消除了老旧格式带来的兼容负担。
+        -   **[核心修复] 修复了 Gemini 3.1 Pro High/Low 的 400 Invalid Argument 错误 (Gemini Thinking Fix)**:
+            -   **问题修复**: 修复了 Claude Code 等上游客户端发送 `thinking` 相关配置对象时，由于 Gemini 3.1 Pro High/Low 尚不支持特定的思维配置被拒绝的问题。系统现已针对这些变体模型正确剥离不支持的 `thinkingConfig` 对象，从而解决了 API 响应 400 的错误 ([Issue #3182](https://github.com/lbjlaq/Antigravity-Manager/issues/3182))。
+        -   **[核心功能] 将 Claude 详细配额组数据暴露给前端并优化展示 (Claude Quota UI Expose)**:
+            -   **功能新增**: 在后端和接口层中新增了对模型分组配额（如 weekly 和 5h 窗口）的完整支持，并在账号详情页引入全新的 Tab 切换交互，使用户能直观查看各模型的详细双窗口配额分配情况 ([PR #3185](https://github.com/lbjlaq/Antigravity-Manager/pull/3185))。
+            -   **问题修复**: 修复了由于缺少依赖 (BoringSSL 构建工具) 导致的本地分发版 Docker 编译报错问题，并添加了缺少的 Tauri 前端资源映射步骤。
     *   **v4.2.2 (2026-06-12)**:
         -   **[安全与稳定] 安全审计与错误修复 (Security & Bug Fixes)**:
             -   **核心修复**: 修复了当代理认证模式设置为 `Off` 时，管理接口存在权限绕过的漏洞 ([PR #3134](https://github.com/lbjlaq/Antigravity-Manager/pull/3134))。

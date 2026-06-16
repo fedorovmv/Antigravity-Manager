@@ -472,8 +472,8 @@ pub fn transform_claude_request_in(
     let target_model_supports_thinking = mapped_model.contains("-thinking")
         || mapped_model.starts_with("claude-")
         || mapped_model.contains("gemini-2.0-pro")
-        || mapped_model.contains("gemini-3-pro")
-        || mapped_model.contains("gemini-3.1-pro")
+        || (mapped_model.contains("gemini-3-pro") && !mapped_model.contains("-high") && !mapped_model.contains("-low"))
+        || (mapped_model.contains("gemini-3.1-pro") && !mapped_model.contains("-high") && !mapped_model.contains("-low"))
         // [FIX #2167] gemini-3-flash / gemini-3.1-flash 支持 thinking，必须纳入识别范围
         || mapped_model.contains("gemini-3-flash")
         || mapped_model.contains("gemini-3.1-flash");

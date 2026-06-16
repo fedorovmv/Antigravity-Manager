@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { X, Clock, AlertCircle, Bot } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { Account } from '../../types/account';
@@ -12,6 +13,7 @@ interface AccountDetailsDialogProps {
 
 export default function AccountDetailsDialog({ account, onClose }: AccountDetailsDialogProps) {
     const { t } = useTranslation();
+    const [activeTab, setActiveTab] = useState<'basic' | 'detailed'>('basic');
     if (!account) return null;
 
     return createPortal(
@@ -82,77 +84,136 @@ export default function AccountDetailsDialog({ account, onClose }: AccountDetail
                         </div>
                     )}
 
-                    <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3">{t('accounts.details.model_quota')}</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {(() => {
-                            const uniqueLabels = new Set<string>();
-                            return sortModels(
-                                (account.quota?.models || []).map(model => {
-                                    const config = MODEL_CONFIG[model.name.toLowerCase()];
-                                    const label = model.display_name || (config?.i18nKey ? t(config.i18nKey) : (config?.label || model.name));
-                                    return {
-                                        id: model.name.toLowerCase(),
-                                        label: label,
-                                        model
-                                    };
-                                })
-                            ).filter(m => {
-                                if (uniqueLabels.has(m.label)) return false;
-                                uniqueLabels.add(m.label);
-                                return true;
-                            }).map(({ model, label }) => (
-                                <div key={model.name} className="p-4 rounded-xl border border-gray-100 dark:border-base-200 bg-white dark:bg-base-100 hover:border-blue-100 dark:hover:border-blue-900 hover:shadow-sm transition-all group">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <div className="flex flex-col gap-1">
-                                            <div className="flex items-center gap-2">
-                                                {(() => {
-                                                    const Icon = MODEL_CONFIG[model.name.toLowerCase()]?.Icon || Bot;
-                                                    return <Icon size={16} className="shrink-0" />;
-                                                })()}
-                                                <span className="text-sm font-medium font-mono text-gray-700 dark:text-gray-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
-                                                    {label}
-                                                </span>
-                                            </div>
-                                            {model.thinking_budget !== undefined && (
-                                                <span className="text-[10px] text-gray-500 font-mono bg-gray-100 dark:bg-base-200 px-1 rounded inline-block w-max mt-0.5">
-                                                    {t('proxy.config.thinking_budget', 'Thinking Budget')}: {model.thinking_budget}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <span
-                                            className={`text-xs font-bold px-2 py-0.5 rounded-md ${model.percentage >= 50 ? 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                                model.percentage >= 20 ? 'bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
-                                                    'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400'
-                                                }`}
-                                        >
-                                            {model.percentage}%
-                                        </span>
-                                    </div>
-
-                                    {/* Progress Bar */}
-                                    <div className="h-1.5 w-full bg-gray-100 dark:bg-base-200 rounded-full overflow-hidden mb-3">
-                                        <div
-                                            className={`h-full rounded-full transition-all duration-500 ${model.percentage >= 50 ? 'bg-emerald-500' :
-                                                model.percentage >= 20 ? 'bg-orange-400' :
-                                                    'bg-red-500'
-                                                }`}
-                                            style={{ width: `${model.percentage}%` }}
-                                        ></div>
-                                    </div>
-
-                                    <div className="flex items-center gap-1.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono">
-                                        <Clock size={10} />
-                                        <span>{t('accounts.reset_time')}: {formatDate(model.reset_time) || t('common.unknown')}</span>
-                                    </div>
-                                </div>
-                            ));
-                        })() || (
-                                <div className="col-span-2 py-10 text-center text-gray-400 flex flex-col items-center">
-                                    <AlertCircle className="w-8 h-8 mb-2 opacity-20" />
-                                    <span>{t('accounts.no_data')}</span>
-                                </div>
-                            )}
+                    <div className="flex gap-6 border-b border-gray-100 dark:border-base-200 mb-4">
+                        <button
+                            onClick={() => setActiveTab('basic')}
+                            className={`pb-2 text-xs font-bold uppercase tracking-widest transition-colors border-b-2 ${activeTab === 'basic' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                        >
+                            {t('accounts.details.model_quota')}
+                        </button>
+                        {account.quota?.quota_groups && account.quota.quota_groups.length > 0 && (
+                            <button
+                                onClick={() => setActiveTab('detailed')}
+                                className={`pb-2 text-xs font-bold uppercase tracking-widest transition-colors border-b-2 flex items-center gap-1.5 ${activeTab === 'detailed' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                            >
+                                <Bot size={12} className={activeTab === 'detailed' ? 'text-blue-500' : ''} />
+                                {t('accounts.details.quota_groups', 'Detailed Quota')}
+                            </button>
+                        )}
                     </div>
+
+                    {activeTab === 'basic' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {(() => {
+                                const uniqueLabels = new Set<string>();
+                                return sortModels(
+                                    (account.quota?.models || []).map(model => {
+                                        const config = MODEL_CONFIG[model.name.toLowerCase()];
+                                        const label = model.display_name || (config?.i18nKey ? t(config.i18nKey) : (config?.label || model.name));
+                                        return {
+                                            id: model.name.toLowerCase(),
+                                            label: label,
+                                            model
+                                        };
+                                    })
+                                ).filter(m => {
+                                    if (uniqueLabels.has(m.label)) return false;
+                                    uniqueLabels.add(m.label);
+                                    return true;
+                                }).map(({ model, label }) => (
+                                    <div key={model.name} className="p-4 rounded-xl border border-gray-100 dark:border-base-200 bg-white dark:bg-base-100 hover:border-blue-100 dark:hover:border-blue-900 hover:shadow-sm transition-all group">
+                                        <div className="flex justify-between items-start mb-3">
+                                            <div className="flex flex-col gap-1">
+                                                <div className="flex items-center gap-2">
+                                                    {(() => {
+                                                        const Icon = MODEL_CONFIG[model.name.toLowerCase()]?.Icon || Bot;
+                                                        return <Icon size={16} className="shrink-0" />;
+                                                    })()}
+                                                    <span className="text-sm font-medium font-mono text-gray-700 dark:text-gray-300 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                                                        {label}
+                                                    </span>
+                                                </div>
+                                                {model.thinking_budget !== undefined && (
+                                                    <span className="text-[10px] text-gray-500 font-mono bg-gray-100 dark:bg-base-200 px-1 rounded inline-block w-max mt-0.5">
+                                                        {t('proxy.config.thinking_budget', 'Thinking Budget')}: {model.thinking_budget}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <span
+                                                className={`text-xs font-bold px-2 py-0.5 rounded-md ${model.percentage >= 50 ? 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                                    model.percentage >= 20 ? 'bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
+                                                        'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                                    }`}
+                                            >
+                                                {model.percentage}%
+                                            </span>
+                                        </div>
+
+                                        {/* Progress Bar */}
+                                        <div className="h-1.5 w-full bg-gray-100 dark:bg-base-200 rounded-full overflow-hidden mb-3">
+                                            <div
+                                                className={`h-full rounded-full transition-all duration-500 ${model.percentage >= 50 ? 'bg-emerald-500' :
+                                                    model.percentage >= 20 ? 'bg-orange-400' :
+                                                        'bg-red-500'
+                                                    }`}
+                                                style={{ width: `${model.percentage}%` }}
+                                            ></div>
+                                        </div>
+
+                                        <div className="flex items-center gap-1.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono">
+                                            <Clock size={10} />
+                                            <span>{t('accounts.reset_time')}: {formatDate(model.reset_time) || t('common.unknown')}</span>
+                                        </div>
+                                    </div>
+                                ));
+                            })() || (
+                                    <div className="col-span-2 py-10 text-center text-gray-400 flex flex-col items-center">
+                                        <AlertCircle className="w-8 h-8 mb-2 opacity-20" />
+                                        <span>{t('accounts.no_data')}</span>
+                                    </div>
+                                )}
+                        </div>
+                    )}
+
+                    {/* Quota Groups Section (New in 4.2.3) */}
+                    {activeTab === 'detailed' && account.quota?.quota_groups && account.quota.quota_groups.length > 0 && (
+                        <div className="flex flex-col gap-4">
+                            {account.quota.quota_groups.map((group, idx) => (
+                                <div key={idx} className="p-4 rounded-xl border border-blue-100 dark:border-blue-900/30 bg-blue-50/30 dark:bg-blue-900/10">
+                                    <div className="font-medium text-sm text-blue-800 dark:text-blue-300 mb-3 font-mono flex justify-between items-center">
+                                        <span>{group.display_name}</span>
+                                        {group.description && <span className="text-[10px] font-normal opacity-70">{group.description}</span>}
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {group.buckets.map((bucket, bIdx) => {
+                                            const percentage = Math.round(bucket.remaining_fraction * 100);
+                                            return (
+                                                <div key={bIdx} className="bg-white dark:bg-base-200 p-3 rounded-lg border border-gray-100 dark:border-white/5 shadow-sm">
+                                                    <div className="flex justify-between items-center mb-2">
+                                                        <span className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">{bucket.window}</span>
+                                                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${percentage >= 50 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : percentage >= 20 ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
+                                                            {percentage}%
+                                                        </span>
+                                                    </div>
+                                                    {/* Progress bar */}
+                                                    <div className="h-1.5 w-full bg-gray-100 dark:bg-base-300 rounded-full overflow-hidden mb-2">
+                                                        <div className={`h-full rounded-full transition-all duration-500 ${percentage >= 50 ? 'bg-emerald-500' : percentage >= 20 ? 'bg-amber-400' : 'bg-red-500'}`} style={{ width: `${percentage}%` }}></div>
+                                                    </div>
+                                                    <div className="flex justify-between items-center text-[10px] text-gray-500 font-mono">
+                                                        <div className="flex items-center gap-1">
+                                                            <Clock size={10} />
+                                                            <span>{t('accounts.reset_time')}:</span>
+                                                        </div>
+                                                        <span>{formatDate(bucket.reset_time) || t('common.unknown')}</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="modal-backdrop bg-black/40 backdrop-blur-sm" onClick={onClose}></div>
