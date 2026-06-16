@@ -272,6 +272,7 @@ mod tests {
                 },
             ],
             current_account_id: Some("acc-1".to_string()),
+            current_target_ide: None,
         };
 
         // Save the index
@@ -314,6 +315,53 @@ mod tests {
             "save_account_index roundtrip: successfully saved and loaded index with {} accounts",
             loaded.accounts.len()
         );
+    }
+
+    #[test]
+    fn test_set_current_account_id_with_target() {
+        let _guard = TEST_MUTEX.lock().unwrap();
+        let dir = TestDataDir::new();
+        std::env::set_var("ABV_DATA_DIR", dir.path());
+
+        // Create a dummy account index with some accounts
+        let now = chrono::Utc::now().timestamp();
+        let index = AccountIndex {
+            version: "2.0".to_string(),
+            accounts: vec![
+                AccountSummary {
+                    id: "acc-1".to_string(),
+                    email: "user1@example.com".to_string(),
+                    name: Some("User One".to_string()),
+                    disabled: false,
+                    proxy_disabled: false,
+                    protected_models: HashSet::new(),
+                    created_at: now,
+                    last_used: now,
+                },
+            ],
+            current_account_id: None,
+            current_target_ide: None,
+        };
+        save_account_index_in_dir(dir.path(), &index).unwrap();
+
+        // 1. Call set_current_account_id_with_target with Some("agy")
+        set_current_account_id_with_target("acc-1", Some("agy")).unwrap();
+
+        // Load back and verify
+        let index = load_account_index_in_dir(dir.path()).unwrap();
+        assert_eq!(index.current_account_id, Some("acc-1".to_string()));
+        assert_eq!(index.current_target_ide, Some("agy".to_string()));
+
+        // 2. Call set_current_account_id (which sets target to None)
+        set_current_account_id("acc-1").unwrap();
+
+        // Load back and verify target is None
+        let index = load_account_index_in_dir(dir.path()).unwrap();
+        assert_eq!(index.current_account_id, Some("acc-1".to_string()));
+        assert_eq!(index.current_target_ide, None);
+
+        // Clean up environment variable
+        std::env::remove_var("ABV_DATA_DIR");
     }
 
     #[test]
@@ -556,6 +604,7 @@ fn rebuild_index_from_accounts_in_dir(data_dir: &PathBuf) -> Result<AccountIndex
         version: "2.0".to_string(),
         accounts: summaries,
         current_account_id,
+        current_target_ide: None,
     })
 }
 
@@ -1051,14 +1100,7 @@ pub async fn switch_account(
     integration.on_account_switch(&account, target_ide).await?;
 
     // 4. Update tool internal state
-    {
-        let _lock = ACCOUNT_INDEX_LOCK
-            .lock()
-            .map_err(|e| format!("failed_to_acquire_lock: {}", e))?;
-        let mut index = load_account_index()?;
-        index.current_account_id = Some(account_id.to_string());
-        save_account_index(&index)?;
-    }
+    set_current_account_id_with_target(account_id, target_ide)?;
 
     account.update_last_used();
     save_account(&account)?;
@@ -1430,11 +1472,17 @@ pub fn get_current_account() -> Result<Option<Account>, String> {
 
 /// Set current active account ID
 pub fn set_current_account_id(account_id: &str) -> Result<(), String> {
+    set_current_account_id_with_target(account_id, None)
+}
+
+/// Set current active account ID and target IDE
+pub fn set_current_account_id_with_target(account_id: &str, target_ide: Option<&str>) -> Result<(), String> {
     let _lock = ACCOUNT_INDEX_LOCK
         .lock()
         .map_err(|e| format!("failed_to_acquire_lock: {}", e))?;
     let mut index = load_account_index()?;
     index.current_account_id = Some(account_id.to_string());
+    index.current_target_ide = target_ide.map(|s| s.to_string());
     save_account_index(&index)
 }
 
