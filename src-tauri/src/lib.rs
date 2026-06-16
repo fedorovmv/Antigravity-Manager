@@ -286,10 +286,9 @@ pub fn run() {
 
                     info!("Headless proxy service is running.");
 
-                    // [DISABLED] Start smart scheduler (Automatic warmup disabled as per user request)
-                    // modules::scheduler::start_scheduler(None, proxy_state.clone());
-                    info!("Smart scheduler (Automatic Warmup) is DISABLED.");
-                    info!("Smart scheduler started in headless mode.");
+                    // Start background task scheduler
+                    modules::scheduler::start_scheduler(None, proxy_state.clone());
+                    info!("Background task scheduler started in headless mode.");
                 }
                 Err(e) => {
                     error!("Failed to load config for headless mode: {}", e);
@@ -412,10 +411,12 @@ pub fn run() {
                 }
             });
 
-            // [DISABLED] Start smart scheduler (Automatic warmup disabled as per user request)
-            // let scheduler_state = app.handle().state::<commands::proxy::ProxyServiceState>();
-            // modules::scheduler::start_scheduler(Some(app.handle().clone()), scheduler_state.inner().clone());
-            info!("Smart scheduler (Automatic Warmup) is DISABLED.");
+            // Start background task scheduler (for auto-refresh, auto-sync, and smart warmup)
+            let scheduler_state = app.handle().state::<commands::proxy::ProxyServiceState>();
+            modules::scheduler::start_scheduler(
+                Some(app.handle().clone()),
+                scheduler_state.inner().clone(),
+            );
 
             // [PHASE 1] 已整合至 Axum 端口 (8045)，不再单独启动 19527 端口
             info!("Management API integrated into main proxy server (port 8045)");

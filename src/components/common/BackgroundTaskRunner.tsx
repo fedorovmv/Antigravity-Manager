@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useConfigStore } from '../../stores/useConfigStore';
 import { useAccountStore } from '../../stores/useAccountStore';
+import { isTauri } from '../../utils/env';
 
 function BackgroundTaskRunner() {
     const { config } = useConfigStore();
@@ -24,7 +25,7 @@ function BackgroundTaskRunner() {
         }
         prevAutoRefreshRef.current = auto_refresh;
 
-        if (auto_refresh && refresh_interval > 0) {
+        if (auto_refresh && refresh_interval > 0 && !isTauri()) {
             console.log(`[BackgroundTask] Starting auto-refresh quota timer: ${refresh_interval} mins`);
             intervalId = setInterval(() => {
                 console.log('[BackgroundTask] Auto-refreshing all quotas...');
@@ -55,7 +56,7 @@ function BackgroundTaskRunner() {
         }
         prevAutoSyncRef.current = auto_sync;
 
-        if (auto_sync && sync_interval > 0) {
+        if (auto_sync && sync_interval > 0 && !isTauri()) {
             console.log(`[BackgroundTask] Starting auto-sync account timer: ${sync_interval} mins`);
             intervalId = setInterval(() => {
                 console.log('[BackgroundTask] Auto-syncing current account from DB...');

@@ -78,9 +78,10 @@ export default function MiniView() {
 
     // Auto-refresh logic based on config
     useEffect(() => {
+        if (isTauri()) return; // Backend scheduler handles this in Tauri
         if (!config?.auto_refresh || !config?.refresh_interval || config.refresh_interval <= 0) return;
 
-        console.log(`[MiniView] Starting auto-refresh timer: ${config.refresh_interval} mins`);
+        console.log(`[MiniView] Starting auto-refresh timer (web fallback): ${config.refresh_interval} mins`);
 
         const intervalId = setInterval(() => {
             if (!isRefreshing && currentAccount) {
